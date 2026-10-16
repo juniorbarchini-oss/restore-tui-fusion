@@ -68,6 +68,9 @@ class Config:
     pbs_fingerprint: str = ""
     pbs_power_saver: bool = True  # el push corre con perfil power-saver (si el sistema lo ofrece)
 
+    # -- updates -------------------------------------------------------
+    check_updates: bool = True  # the menu looks for a newer version at most once a day
+
     @property
     def effective_remote_keep(self) -> int:
         """REMOTE_KEEP si está definido; si no, LOCAL_KEEP (configs existentes no cambian)."""

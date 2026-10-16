@@ -210,6 +210,8 @@ def load(
     cfg.pbs_fingerprint = get("PBS_FINGERPRINT") or ""
     if _falsy(get("PBS_POWER_SAVER")):
         cfg.pbs_power_saver = False
+    if _falsy(get("CHECK_UPDATES")):
+        cfg.check_updates = False
     return cfg
 
 

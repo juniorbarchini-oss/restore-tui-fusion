@@ -43,7 +43,7 @@ class Box:
         for d in ("opt", "usr/local/bin", "usr/share/applications"):
             (self.root / d).mkdir(parents=True)
         # PATH hermético: dobles inofensivos para sudo/pacman/apt-get/sshfs... + herramientas básicas.
-        self.path, self.fakes = hermetic.hermetic_path(tmp_path)
+        self.path, self.fakes = hermetic.hermetic_path(tmp_path, extra=("git",))
         assert hermetic.escaped_commands(self.path, self.fakes) == {}
         self.env = {
             "HERMETIC_LOG": str(tmp_path / "calls.log"),
@@ -126,6 +126,16 @@ def test_clean_install_layout(box):
     owned = (opt / ".owned-paths").read_text().split()
     assert "/opt/restore-fusion" in owned and "/usr/local/bin/backup-now" in owned
     assert not box.p("/opt/restore-fusion-archive").exists(), "nothing to retire: no archive"
+
+
+def test_install_records_the_commit_for_the_update_check(box):
+    r = box.install("--yes")
+    assert r.returncode == 0, r.stderr + r.stdout
+    version = (box.p("/opt/restore-fusion") / "VERSION").read_text().strip()
+    head = subprocess.run(
+        ["git", "-C", str(REPO), "rev-parse", "HEAD"], capture_output=True, text=True
+    ).stdout.strip()
+    assert version == (head or "unknown")
 
 
 def test_config_is_seeded_with_mode_600_when_none_exists(box):

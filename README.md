@@ -45,10 +45,15 @@ The installer puts the app in `/opt/restore-fusion`, links `restore-tui`, `resto
 into `/usr/local/bin`, and creates `~/.config/restore-tui/config.conf` (mode 600) **only if none exists**.
 It never touches your backups or local snapshots.
 
+**Updating.** The menu checks GitHub (`git ls-remote`, at most once a day, silent when offline) and shows
+`[U] Update (new version ... available)` when `main` has moved. `[U]` asks for confirmation, clones `main`
+to a temporary folder and runs its `install.sh --upgrade` (it asks for your sudo password in the terminal).
+Turn the daily check off with `CHECK_UPDATES=false` in `config.conf`.
+
 ## Use
 
 ```bash
-restore-tui              # menu: [B]ackup [R]estore [S]ettings [P]BS push [X]PBS restore [F]ull recovery
+restore-tui              # menu: [B]ackup [R]estore [S]ettings [P]BS push [X]PBS restore [F]ull recovery [U]pdate
 backup-now --dry-run     # show what a backup would do, write nothing
 backup-now               # run a backup
 restore-now              # browse snapshots and restore files

@@ -8,6 +8,7 @@
     [X]  Restore from Proxmox (PBS)  (same)
     [F]  Full recovery (freshly installed machine)
     [W]  Welcome / what is supported
+    [U]  Update (installed copies: looks for and installs a newer version)
     [Q]  Quit
 
 `restore-tui backup [...]` salta directo al
@@ -28,7 +29,7 @@ from rich.panel import Panel
 from rich.text import Text
 
 from . import config as cfgmod
-from . import welcome, wizard
+from . import update, welcome, wizard
 from .detect import (
     btrfs_tool_present,
     choose_engine,
@@ -155,6 +156,12 @@ def _print_menu() -> None:
     header.append("   [D]  Destinations (drive or SSH computer)\n", style="#00FF66")
     header.append("   [F]  Full recovery (freshly installed machine)\n", style="#00FF66")
     header.append("   [W]  Welcome / what is supported\n", style="#00FF66")
+    if update.is_installed():
+        newer = update.available(Path(cfg.home), cfg.check_updates)
+        header.append("   [U]  Update", style="#00FF66")
+        header.append(
+            f"  (new version {newer[:7]} available)\n" if newer else "\n", style="bold yellow"
+        )
     header.append("   [Q]  Quit", style="#00FF66")
     console.print(Panel(header, border_style="#00FF66"))
 
@@ -184,6 +191,9 @@ def _menu() -> int:
                 console.print(f"[yellow]  The destinations assistant failed: {exc}[/]")
             _print_menu()  # el destino mostrado pudo cambiar
             continue
+        elif choice in ("u", "update"):
+            if update.run_update(console, Path(cfgmod.load().home)):
+                return 0  # the running code was just replaced
         elif choice in ("f", "full"):
             _show_recovery_info()
             continue
@@ -199,6 +209,7 @@ def _menu() -> int:
                 "D",
                 "F",
                 "W",
+                *(["U"] if update.is_installed() else []),
                 "Q",
             ]
             console.print(f"[yellow]  Pick one: {', '.join(keys)}[/]")

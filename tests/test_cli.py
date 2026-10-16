@@ -163,3 +163,25 @@ def test_hidden_pbs_keys_still_run_and_hint_omits_them(monkeypatch, capsys):
     rm.assert_called_once_with("restore_fusion.pbs.push")  # sigue funcionando para scripts
     hint = capsys.readouterr().out
     assert "Pick one: B, R, S, D, F, W, Q" in " ".join(hint.split())
+
+
+def test_menu_u_updates_and_leaves_when_installed(monkeypatch):
+    seq = iter(["u"])
+    monkeypatch.setattr(cli.console, "input", lambda *a, **k: next(seq))
+    with (
+        mock.patch.object(cli.update, "run_update", return_value=True) as ru,
+        mock.patch.object(cli, "_print_menu"),
+    ):
+        assert cli.main([]) == 0
+    ru.assert_called_once()
+
+
+def test_menu_u_not_updated_returns_to_menu(monkeypatch):
+    seq = iter(["u", "q"])
+    monkeypatch.setattr(cli.console, "input", lambda *a, **k: next(seq))
+    with (
+        mock.patch.object(cli.update, "run_update", return_value=False),
+        mock.patch.object(cli, "_print_menu") as pm,
+    ):
+        cli.main([])
+    assert pm.call_count == 2
