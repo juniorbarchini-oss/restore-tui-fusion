@@ -47,6 +47,18 @@ def paths_report(cfg, home: Path) -> List[Row]:
             "marker: the welcome screen was shown (safe to delete)",
         ),
         (
+            str(home / ".local/state/restore-tui/update-check"),
+            "cache of the daily new-version check (safe to delete)",
+        ),
+        (
+            "/opt/restore-fusion/VERSION",
+            "commit that install.sh installed, used by the update check",
+        ),
+        (
+            "$TMPDIR/restore-fusion-update-<random>/",
+            "temporary clone made by [U] Update - removed when it ends",
+        ),
+        (
             "/opt/restore-fusion-archive/",
             "old installs retired by install.sh (archived, never deleted)",
         ),
