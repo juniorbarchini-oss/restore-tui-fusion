@@ -1,0 +1,61 @@
+# restore-fusion - example configuration
+# Copy to  ~/.config/restore-tui/config.conf  (also read: ~/.config/btrfs-restore/config.conf,
+# /etc/restore-tui/config.conf, /etc/btrfs-restore/config.conf).
+# The program never rewrites this file, except the Settings screen, which changes only the
+# keys you edit there. Keep it private (chmod 600): it may hold PBS_PASSWORD.
+#
+# Every key can also be an environment variable with the RESTORE_TUI_ prefix (env wins).
+# No host, IP or path is shipped as a default: put your own values below.
+
+# --- Engine -------------------------------------------------------------
+# auto  = btrfs send/receive when / and /home are btrfs subvolumes, rsync otherwise
+# rsync = force rsync + hardlinks (the only way to use rsync on a btrfs system)
+# btrfs = force btrfs send/receive
+#ENGINE=auto
+
+# --- Backup drive -------------------------------------------------------
+# Mount point of the drive. It MUST be a real mount point; a leftover empty
+# directory is refused. If unset, a drive is auto-detected ONLY when it already
+# holds a backup of this engine or its label matches TARGET_LABEL. There is no
+# "first drive found" fallback.
+#TARGET_DIR=/run/media/<user>/<DRIVE_LABEL>
+#TARGET_LABEL=USB_DATA
+
+# --- Retention ----------------------------------------------------------
+MAX_DISK_PERCENT=80
+MIN_KEEP=2
+#MAX_SNAPSHOTS=0
+# LOCAL_KEEP: read-only snapshots kept on THIS machine (parents for incremental sends). Minimum 2.
+#LOCAL_KEEP=10
+# REMOTE_KEEP: copies kept on each SSH destination (btrfs engine). Minimum 2.
+# If unset it equals LOCAL_KEEP, so existing configs behave as before.
+#REMOTE_KEEP=10
+#REMOTE_MAX_GB=200
+
+# --- btrfs engine only --------------------------------------------------
+#LOCAL_SNAPSHOTS_DIR=/.snapshots
+#STAGING_DIR=/.snapshots/staging
+
+# --- Exclusions ---------------------------------------------------------
+# One EXCLUDE line each, added to the engine's built-in list.
+# rsync engine: rsync patterns relative to $HOME.
+# btrfs engine: globs relative to each source mount.
+#EXCLUDE_DEFAULTS=off
+#EXCLUDE=*/node_modules
+
+# --- Remote SSH target --------------------------------------------------
+#REMOTE_ENABLED=true
+#REMOTE_HOST=backup-host.example
+#REMOTE_HOST_LAN=
+#REMOTE_PATH=/path/on/the/remote/backups
+#REMOTE_USER=
+#REMOTE_PORT=22
+#REMOTE_NAME=
+
+# --- Proxmox Backup Server (offsite) ------------------------------------
+#PBS_REPOSITORY=user@realm!token@pbs-host.example:datastore
+#PBS_PASSWORD=<api token secret>
+#PBS_FINGERPRINT=<server fingerprint>
+# Hold the system "power-saver" profile only while the push runs (no turbo bursts, so a thin
+# laptop does not hit its thermal limit). Released automatically when the push ends.
+#PBS_POWER_SAVER=true

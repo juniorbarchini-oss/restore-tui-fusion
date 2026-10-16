@@ -1,0 +1,6 @@
+echo -e "${GREEN}=================================================================${NC}"
+echo -e "${GREEN}  RECOVERY COMPLETE${NC}"
+echo -e "  - review /etc/fstab and the bootloader config under ${STATE_DIR}/bootloader/"
+echo -e "  - regenerate initramfs if needed:  sudo mkinitcpio -P"
+echo -e "  - reboot"
+echo -e "${GREEN}=================================================================${NC}"

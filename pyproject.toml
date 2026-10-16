@@ -1,0 +1,17 @@
+[project]
+name = "restore-fusion"
+version = "0.0.1"
+description = "Backup + granular restore TUI: rsync/hardlinks or btrfs send/receive, apt or pacman"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+dependencies = ["textual~=8.2", "rich~=15.0"]
+
+[tool.setuptools.packages.find]
+include = ["restore_fusion*"]
+
+[tool.black]
+line-length = 100
+target-version = ["py310"]
+
+[tool.setuptools.package-data]
+"restore_fusion.system_state" = ["templates/*/*.sh"]
