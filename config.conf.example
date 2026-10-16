@@ -59,3 +59,8 @@ MIN_KEEP=2
 # Hold the system "power-saver" profile only while the push runs (no turbo bursts, so a thin
 # laptop does not hit its thermal limit). Released automatically when the push ends.
 #PBS_POWER_SAVER=true
+
+# --- Updates ------------------------------------------------------------
+# The menu asks GitHub (git ls-remote, once a day) whether a newer version exists and shows it next
+# to [U]. Set to false to turn the daily check off; [U] still updates on request.
+#CHECK_UPDATES=true

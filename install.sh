@@ -135,6 +135,9 @@ copy_app() {
         | tar -C "${dst}" -xf -
     cp -- "${SRC_DIR}/requirements.txt" "${SRC_DIR}/config.conf.example" "${SRC_DIR}/uninstall.sh" "${dst}/"
     chmod +x "${dst}/bin/"* "${dst}/uninstall.sh"
+    # commit installed, so the app can tell when a newer one exists (see restore_fusion/update.py)
+    local rev; rev="$(git -c safe.directory="${SRC_DIR}" -C "${SRC_DIR}" rev-parse HEAD 2>/dev/null || true)"
+    printf '%s\n' "${rev:-unknown}" > "${dst}/VERSION"
     OWNED+=("${OPT_DIR}")
 }
 
