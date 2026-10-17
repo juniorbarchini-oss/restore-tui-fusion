@@ -1,6 +1,6 @@
 [project]
 name = "restore-fusion"
-version = "0.0.1"
+version = "0.1.0"
 description = "Backup + granular restore TUI: rsync/hardlinks or btrfs send/receive, apt or pacman"
 requires-python = ">=3.10"
 license = {text = "MIT"}
