@@ -1,5 +1,9 @@
 # Real-hardware checklist (plan section 7, H1-H16)
 
+> **Note.** Several items below were exercised in real use or in the original btrfs and rsync tools before the
+> merge (see "What has been tested" in the README) but never written into the result table. Empty rows mean
+> "no recorded test", not "failed".
+
 Nothing on this list can be run by the automated test suite. A CI sandbox has no btrfs, sudo, USB
 stick, SSH host, FUSE, Proxmox Backup Server or terminal. Every item below is **unverified until you tick it**.
 The automated suite (`./run-tests.sh`) reports the matching tests as SKIPPED, never as passed.

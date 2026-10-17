@@ -3,10 +3,10 @@
 A terminal app (Python + [Textual](https://textual.textualize.io/)) to back up a Linux home directory and
 system state, and to restore single files, folders or a whole machine from those backups.
 
-> **Status: alpha.** The logic is covered by unit tests that use fakes. Everything that needs real disks,
-> `sudo`, SSH, FUSE or a Proxmox server has **not** been fully verified on real hardware yet: see
-> [`docs/HARDWARE_CHECKLIST.md`](docs/HARDWARE_CHECKLIST.md) for what was and was not tested.
-> Do not make this your only backup.
+> **Status.** In daily use for backups and restores on Arch/Omarchy (btrfs) and Ubuntu (ext4) machines.
+> See [What has been tested](#what-has-been-tested) below, and
+> [`docs/HARDWARE_CHECKLIST.md`](docs/HARDWARE_CHECKLIST.md) for the edge cases that have no recorded test yet.
+> As with any backup tool, keep a second copy of data you cannot lose.
 
 > **Warning.** The installer and the backup/restore commands run with `sudo` and can **write to and
 > overwrite real data** (restoring files over their original location, deleting old snapshots according to
@@ -66,6 +66,24 @@ fill in your own drive, SSH host and (optionally) PBS settings. No host, IP or p
 
 To remove it: `sudo /opt/restore-fusion/uninstall.sh` (keeps your config, backups and snapshots unless you
 explicitly choose otherwise).
+
+## What has been tested
+
+This project merges two earlier tools, `btrfs-restore-tui` (btrfs engine) and `restore-tui` (ext4/rsync engine).
+Their engines were tested before the merge, and the merged app has been in daily use since.
+
+- **btrfs engine:** full and incremental `btrfs send/receive`; a bare-metal recovery of a real machine's backup onto
+  a clean Arch/Omarchy VM, with the package list reinstalled and the home directory restored byte for byte.
+- **rsync engine:** backup to USB and over SSH, a granular restore from both merged into one timeline, and a
+  bare-metal recovery of a real machine's backup onto a clean Ubuntu VM.
+- **USB:** unplugging the drive in the middle of a backup left the older snapshots intact; one physical disk has
+  served a btrfs machine and an ext4 machine from separate partitions.
+- **Merged app:** installed and used daily on Omarchy machines with USB, SSH and Proxmox Backup Server targets, and
+  upgraded on an Ubuntu machine.
+
+Not yet covered by a recorded test: rejecting exFAT as a destination, killing a send halfway and cleaning up with
+`--gc`, retention by real disk percentage, throughput with large data sets, and two engine layouts inside a single
+partition. They are listed in [`docs/HARDWARE_CHECKLIST.md`](docs/HARDWARE_CHECKLIST.md).
 
 ## Safety rules
 

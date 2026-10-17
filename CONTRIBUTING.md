@@ -1,6 +1,6 @@
 # Contributing
 
-Issues and pull requests are welcome. This is an alpha project that can write to real disks, so changes are
+Issues and pull requests are welcome. This project can write to real disks, so changes are
 reviewed carefully.
 
 ## Workflow

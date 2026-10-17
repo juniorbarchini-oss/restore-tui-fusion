@@ -5,7 +5,7 @@ This tool runs with elevated privileges, handles SSH access and may store a Prox
 
 ## Supported versions
 
-Only the latest release and the `main` branch receive fixes. The project is alpha.
+Only the latest release and the `main` branch receive fixes. Older versions are not maintained.
 
 ## Reporting a vulnerability
 
